@@ -1,3 +1,7 @@
+'''
+使用了通义千问api（因为可以处理图片类型的输入）
+若要使用，需要自行到官网获取api key并配置环境变量
+'''
 from openai import OpenAI
 import os
 import base64
