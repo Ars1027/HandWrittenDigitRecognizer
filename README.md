@@ -1,5 +1,16 @@
 # HandWrittenDigitRecognizer
 手写数字识别：一个关于AI界helloworld的项目(
+# 环境依赖
++ python==3.10
++ numpy==1.22.4
++ opencv_python==4.6.0.66
++ PySide6==6.4.0.1
++ PySide6_Addons==6.4.0.1
++ PySide6_Essentials==6.4.0.1
++ torch==1.11.0
++ tqdm==4.61.1
++ openai==1.54.3
+
 ## 使用了MVP架构（model，view，presenter）
 分别为model.py，view.py(pyqt实现)，presenter.py
 ## 模型训练结果
