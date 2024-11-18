@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import QLabel
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6 import QtGui
 from PySide6.QtWidgets import QMessageBox
-from PIL import ImageTk, Image
 
 class Canvas(QLabel):
+    input_detected = Signal()  # 定义信号，通知主部件用户输入事件
     def __init__(self):
         super().__init__()
         
@@ -12,6 +12,8 @@ class Canvas(QLabel):
         self.canvas.fill(Qt.white)
         # self.canvas.fill(Qt.black)
         self.setPixmap(self.canvas)
+        
+        
         
         self.last_x, self.last_y = None, None # 记录上一个点的坐标
         
@@ -28,17 +30,13 @@ class Canvas(QLabel):
         # 设置画笔
         p = painter.pen()
         # p.setColor(Qt.white)
-        p.setWidth(20)
+        p.setWidth(25)
         p.setCapStyle(Qt.RoundCap)
         p.setJoinStyle(Qt.RoundJoin)
         painter.setPen(p)
         painter.drawLine(self.last_x, self.last_y, ev.x(), ev.y())
         
-        # 使用贝塞斯曲线绘制
-        # path = QtGui.QPainterPath()
-        # path.moveTo(self.last_x, self.last_y)
-        # path.cubicTo((self.last_x + ev.x()) / 2, self.last_y, (self.last_x + ev.x()) / 2, ev.y(), ev.x(), ev.y())
-        # painter.drawPath(path)
+        self.input_detected.emit()  # 触发信号，表示用户有输入
         
         # 更新坐标信息
         self.last_x = ev.x()
@@ -50,7 +48,8 @@ class Canvas(QLabel):
         
     # 重写鼠标释放事件函数         
     def mouseReleaseEvent(self, ev):
-        self.last_x, self.last_y = None, None       
+        self.last_x, self.last_y = None, None     
+        self.input_detected.emit()  # 鼠标释放时也触发信号  
     
     # 重写绘画事件函数
     def paintEvent(self, arg__1):
