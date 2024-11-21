@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, Q
 from PySide6.QtGui import QColor
 from PySide6.QtCore import QTimer
 from PySide6.QtCore import Qt
-
+from camera import Camera
 from Canvas import Canvas
 
 class View(QMainWindow):
@@ -12,7 +12,8 @@ class View(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Handwriting Number Recognition")
-        self.setFixedSize(800, 750)  # 增加宽度以容纳概率可视化
+        # self.setFixedSize(850, 750)  
+        self.setFixedSize(850, 850)  
 
         self.main_widget = MainWidget()
         self.setCentralWidget(self.main_widget)
@@ -44,11 +45,13 @@ class MainWidget(QWidget):
         predict_btn_2 = QPushButton(text="Predict multiple num")
         predict_btn_3 = QPushButton(text="Predict with Qwen")
         clear_btn = QPushButton(text="Clear")
+        open_camera_btn = QPushButton(text="Open Camera") 
 
         btn_layout.addWidget(predict_btn)
         btn_layout.addWidget(predict_btn_2)
         btn_layout.addWidget(predict_btn_3)
         btn_layout.addWidget(clear_btn)
+        btn_layout.addWidget(open_camera_btn)
 
         btn_widget = QWidget()
         btn_widget.setLayout(btn_layout)
@@ -106,6 +109,7 @@ class MainWidget(QWidget):
         predict_btn.clicked.connect(self.onPredictBtnClicked)
         predict_btn_2.clicked.connect(self.onPredictBtnClicked_2)
         predict_btn_3.clicked.connect(self.onPredictBtnClicked_3)
+        open_camera_btn.clicked.connect(self.onOpenCameraBtnClicked)
 
         
     def onClearBtnClicked(self):
@@ -146,6 +150,12 @@ class MainWidget(QWidget):
         
         if self.presenter is not None:
             self.presenter.onPredictWithQwen(self.canvas.getImage_path(), self.onPrediction_3)  # 返回画布内容
+            
+    def onOpenCameraBtnClicked(self):
+        """打开摄像头"""
+        self.camera = Camera(self.presenter)  # 创建 Camera 对象
+        self.camera.video()  
+
         
     def setPresenter(self, presenter):
         self.presenter = presenter
